@@ -34,7 +34,7 @@ class ReusableTextFormField extends StatefulWidget {
 }
 
 class _ReusableTextFormFieldState extends State<ReusableTextFormField> {
-  bool _obscureText = true;
+  bool _obscureText = false;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class _ReusableTextFormFieldState extends State<ReusableTextFormField> {
         ),
         contentPadding: widget.contentPadding,
         suffixIcon: widget.obscureText
-            ? _obscureText
+            ? !_obscureText
                 ? IconButton(
                     icon: const Icon(Icons.visibility),
                     onPressed: () {

@@ -1,12 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../common/utils/theme.dart';
-import '../../../common/widgets/reusable_app_bar_widget.dart';
-import '../../../common/widgets/reusable_button_widget.dart';
-import '../../../common/widgets/reusable_dropdown_widget.dart';
-import '../../../common/widgets/reusable_textformfield_widget.dart';
+import '../../../core/common/widgets/reusable_app_bar_widget.dart';
+import '../../../core/common/widgets/reusable_button_widget.dart';
+import '../../../core/utils/theme.dart';
 import '../../../drawer.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -35,7 +32,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: buildDrawer(context),
+      drawer: buildDrawer(context, null),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),

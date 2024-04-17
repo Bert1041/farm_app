@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../common/utils/theme.dart';
+import '../../../core/utils/theme.dart';
+
 
 class CheckIconWithText extends StatelessWidget {
   final String text;
@@ -18,16 +19,16 @@ class CheckIconWithText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(
-          Icons.check_circle,
-          size: iconSize,
-          color: AppTheme.primary500,
-        ),
-        const SizedBox(width: 8),
+        // Icon(
+        //   Icons.check_circle,
+        //   size: iconSize,
+        //   color: AppTheme.primary500,
+        // ),
+        // const SizedBox(width: 8),
         Expanded(
           child: Text(
             text,
-            style: AppTheme.bodyText3(),
+            style: AppTheme.bodyText3(color: AppTheme.error700),
           ),
         ),
       ],

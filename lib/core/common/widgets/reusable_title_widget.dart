@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../utils/theme.dart';
+import '../../utils/theme.dart';
+
 
 class ReusableTitle extends StatelessWidget {
   final String title;
@@ -12,8 +13,7 @@ class ReusableTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       title,
-      style: AppTheme.title(fontWeight: fontWeight ?? FontWeight.w500),
-      maxLines: 2,
+      style: AppTheme.title(fontWeight: fontWeight ?? FontWeight.w700),
       textAlign: TextAlign.center,
     );
   }

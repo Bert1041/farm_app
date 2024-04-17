@@ -1,11 +1,14 @@
-import 'package:farm_app/common/utils/theme.dart';
+import 'package:farm_app/features/auth/pages/login_screen.dart';
 import 'package:farm_app/features/data_logging/pages/farm_log_screen.dart';
 import 'package:farm_app/features/settings/pages/settings_screen.dart';
 import 'package:farm_app/features/task/pages/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-Drawer buildDrawer(BuildContext context) {
+import 'core/helpers/authentication_helper.dart';
+import 'core/utils/theme.dart';
+
+Drawer buildDrawer(BuildContext context, int? currentDay) {
   return Drawer(
     child: ListView(
       padding: EdgeInsets.zero,
@@ -14,10 +17,7 @@ Drawer buildDrawer(BuildContext context) {
           decoration: const BoxDecoration(
             color: AppTheme.white,
           ),
-          child: Text(
-            'LOGO',
-            style: AppTheme.title(fontWeight: FontWeight.w600),
-          ),
+          child: Image.asset('assets/images/icons/logo.svg'),
         ),
         ListTile(
           contentPadding: EdgeInsets.all(16),
@@ -48,9 +48,7 @@ Drawer buildDrawer(BuildContext context) {
             'Reports',
             style: AppTheme.bodyText2(),
           ),
-          onTap: () {
-
-          },
+          onTap: () {},
         ),
         ListTile(
           contentPadding: EdgeInsets.all(16),
@@ -66,7 +64,9 @@ Drawer buildDrawer(BuildContext context) {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => DataLogScreen()),
+              MaterialPageRoute(
+                builder: (context) => DataLogScreen(currentDay: currentDay!),
+              ),
             );
           },
         ),
@@ -85,6 +85,26 @@ Drawer buildDrawer(BuildContext context) {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => SettingsScreen()),
+            );
+          },
+        ),
+        SizedBox(height: 24 * 8.h),
+        ListTile(
+          contentPadding: const EdgeInsets.all(16),
+          leading: Icon(
+            Icons.logout,
+            size: 24.sp,
+            color: AppTheme.error700,
+          ),
+          title: Text(
+            'Logout',
+            style: AppTheme.bodyText2(color: AppTheme.error700),
+          ),
+          onTap: () {
+            AuthenticationHelper().signOut();
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => LoginScreen()),
             );
           },
         ),
