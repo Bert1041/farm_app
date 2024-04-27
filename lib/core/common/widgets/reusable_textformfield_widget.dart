@@ -14,7 +14,7 @@ class ReusableTextFormField extends StatefulWidget {
   final EdgeInsetsGeometry contentPadding;
 
   const ReusableTextFormField({
-    Key? key,
+    super.key,
     required this.labelText,
     required this.controller,
     this.hintText = '',
@@ -27,7 +27,7 @@ class ReusableTextFormField extends StatefulWidget {
     this.borderRadius = 8.0,
     this.contentPadding =
         const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-  }) : super(key: key);
+  });
 
   @override
   State<ReusableTextFormField> createState() => _ReusableTextFormFieldState();
@@ -68,7 +68,7 @@ class _ReusableTextFormFieldState extends State<ReusableTextFormField> {
                   )
             : null,
       ),
-      obscureText: _obscureText,
+      obscureText: widget.obscureText ? _obscureText : false,
       keyboardType: widget.keyboardType,
       textInputAction: widget.textInputAction,
       validator: widget.validator,

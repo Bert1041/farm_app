@@ -1,179 +1,80 @@
-import 'package:flutter/cupertino.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../common/utils/theme.dart';
-import '../../../common/widgets/reusable_app_bar_widget.dart';
-import '../../../common/widgets/reusable_button_widget.dart';
-import '../../../common/widgets/reusable_dropdown_widget.dart';
-import '../../../common/widgets/reusable_textformfield_widget.dart';
-import '../../../drawer.dart';
+import '../../../core/common/widgets/reusable_app_bar_widget.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key});
+  final String userName;
+
+  const SettingsScreen({super.key, required this.userName});
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
-  }
-
-  String? _selectedBatch;
-  String? _selectedWeight;
-  String? _selectedTemp;
-  String? _selectedFeedConsumption;
-  String? _selectedWaterConsumption;
-
+class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+
     return Scaffold(
-      drawer: buildDrawer(context),
+      // drawer: buildDrawer(context, null),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
           child: CustomScrollView(
             slivers: [
-              ReusableAppBar(
-                title: 'Settings',
-                bottom: TabBar(
-                  controller: _tabController,
-                  tabs: const [
-                    Tab(text: 'General'),
-                    Tab(text: 'Notification'),
-                  ],
-                ),
+              const ReusableAppBar(
+                title: 'Profile',
+                canPop: true,
               ),
               SliverToBoxAdapter(
                 child: Container(
-                  height: 400, // Adjust the height as per your requirement
-                  child: TabBarView(
-                    controller: _tabController,
+                  width: double.infinity,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // General Tab Content
+                      SizedBox(height: 20),
+                      // Add space between app bar and user info
                       Center(
-                        child: Column(
-                          children: [
-                            Text('General Tab Content'),
-                            Expanded(child: SizedBox()),
-                            SizedBox(
-                              width: double.infinity,
-                              child: ReusableButton(
-                                label: 'Save Changes',
-                                color: AppTheme.primary500,
-                                onPressed: () {},
-                              ),
-                            ),
-                          ],
+                        child: CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Colors.blue, // Set background color
+                          child: Text(
+                            user != null ? widget.userName : "", // Get initials
+                            style: const TextStyle(
+                                fontSize: 28,
+                                color: Colors.white), // Customize text style
+                          ),
                         ),
                       ),
-                      // Notification Tab Content
-                      Center(
-                        child: Text('Notification Tab Content'),
+                      const SizedBox(height: 20),
+                      // Add space between avatar and user info
+                      if (user != null) ...[
+                        const SizedBox(height: 10),
+                        Text('Email: ${user.email ?? ""}'),
+                        // Handle null email
+                      ],
+                      const SizedBox(height: 20),
+                      // Add space between user info and notification toggle
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text('Notifications'), // Notification label
+                          Switch(
+                            // Notification toggle
+                            value: true, // Set the default value here
+                            onChanged: (value) {
+                              // Implement your logic for toggling notifications
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
               ),
-              // SliverToBoxAdapter(
-              //   child: Container(
-              //     color: AppTheme.backgroundColor,
-              //     width: double.infinity,
-              //     child: Column(
-              //       children: [
-              //         // TabBarView(
-              //         //   controller: _tabController,
-              //         //   children: [
-              //         //     // General Tab Content
-              //         //     Center(
-              //         //       child: Text('General Tab Content'),
-              //         //     ),
-              //         //     // Notification Tab Content
-              //         //     Center(
-              //         //       child: Text('Notification Tab Content'),
-              //         //     ),
-              //         //   ],
-              //         // ),
-              //       ],
-              //     ),
-              //     // child: Column(
-              //     //   crossAxisAlignment: CrossAxisAlignment.start,
-              //     //   children: [
-              //     //     SizedBox(height: 24.h),
-              //     //     ReusableDropdown<String>(
-              //     //       labelText: 'Select Batch',
-              //     //       items: ['Option 1', 'Option 2', 'Option 3'],
-              //     //       value: _selectedBatch,
-              //     //       onChanged: (value) {
-              //     //         setState(() {
-              //     //           _selectedBatch = value;
-              //     //         });
-              //     //       },
-              //     //     ),
-              //     //     SizedBox(height: 24.h),
-              //     //     ReusableDropdown<String>(
-              //     //       labelText: 'Weight (in grams)',
-              //     //       items: ['Option 1', 'Option 2', 'Option 3'],
-              //     //       value: _selectedWeight,
-              //     //       onChanged: (value) {
-              //     //         setState(() {
-              //     //           _selectedWeight = value;
-              //     //         });
-              //     //       },
-              //     //     ),
-              //     //     SizedBox(height: 24.h),
-              //     //     ReusableDropdown<String>(
-              //     //       labelText: 'Temperature (in Celsius)',
-              //     //       items: ['Option 1', 'Option 2', 'Option 3'],
-              //     //       value: _selectedTemp,
-              //     //       onChanged: (value) {
-              //     //         setState(() {
-              //     //           _selectedTemp = value;
-              //     //         });
-              //     //       },
-              //     //     ),
-              //     //     SizedBox(height: 24.h),
-              //     //     ReusableDropdown<String>(
-              //     //       labelText: 'Feed Consumption (in kilograms)',
-              //     //       items: ['Option 1', 'Option 2', 'Option 3'],
-              //     //       value: _selectedFeedConsumption,
-              //     //       onChanged: (value) {
-              //     //         setState(() {
-              //     //           _selectedFeedConsumption = value;
-              //     //         });
-              //     //       },
-              //     //     ),
-              //     //     SizedBox(height: 24.h),
-              //     //     ReusableDropdown<String>(
-              //     //       labelText: ' Water Consumption (in liters)',
-              //     //       items: ['Option 1', 'Option 2', 'Option 3'],
-              //     //       value: _selectedWaterConsumption,
-              //     //       onChanged: (value) {
-              //     //         setState(() {
-              //     //           _selectedWaterConsumption = value;
-              //     //         });
-              //     //       },
-              //     //     ),
-              //     //     SizedBox(height: 48.h),
-              //     //     SizedBox(
-              //     //       width: double.infinity,
-              //     //       child: ReusableButton(
-              //     //         label: 'Save Changes',
-              //     //         color: AppTheme.primary500,
-              //     //         onPressed: () {},
-              //     //       ),
-              //     //     ),
-              //     //   ],
-              //     // ),
-              //   ),
-              // ),
             ],
           ),
         ),

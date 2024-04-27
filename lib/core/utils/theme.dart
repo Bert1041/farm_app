@@ -12,6 +12,8 @@ class AppTheme {
   static const Color black = Color(0xFF000000);
   static const Color blackSecondary = Color(0xFF141522);
   static const Color secondary400 = Color(0xFF54577A);
+  static const Color tile = Color(0xFFC9E8F5);
+  static const Color tile2 = Color(0xFFF5C9C9);
   static const Color primary500 = Color(0xFF546FFF);
   static const Color error700 = Color(0xFFB71112);
   static const Color white = Color(0xFFFFFFFF);
@@ -87,7 +89,7 @@ class AppTheme {
     FontWeight fontWeight = FontWeight.w500,
   }) {
     return GoogleFonts.plusJakartaSans(
-      fontSize: 12.sp,
+      fontSize: 14.sp,
       fontWeight: fontWeight,
       color: color,
     );

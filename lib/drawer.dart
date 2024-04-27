@@ -1,11 +1,16 @@
-import 'package:farm_app/common/utils/theme.dart';
+import 'package:farm_app/features/auth/pages/login_screen.dart';
 import 'package:farm_app/features/data_logging/pages/farm_log_screen.dart';
-import 'package:farm_app/features/settings/pages/settings_screen.dart';
+import 'package:farm_app/features/data_logging/pages/reports_screen.dart';
+import 'package:farm_app/features/settings/pages/about_screen.dart';
 import 'package:farm_app/features/task/pages/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-Drawer buildDrawer(BuildContext context) {
+import 'core/helpers/authentication_helper.dart';
+import 'core/utils/theme.dart';
+import 'features/data_logging/pages/benchmark_screen.dart';
+
+Drawer buildDrawer(BuildContext context, int currentDay) {
   return Drawer(
     child: ListView(
       padding: EdgeInsets.zero,
@@ -14,13 +19,10 @@ Drawer buildDrawer(BuildContext context) {
           decoration: const BoxDecoration(
             color: AppTheme.white,
           ),
-          child: Text(
-            'LOGO',
-            style: AppTheme.title(fontWeight: FontWeight.w600),
-          ),
+          child: Image.asset('assets/images/logo.png'),
         ),
         ListTile(
-          contentPadding: EdgeInsets.all(16),
+          contentPadding: const EdgeInsets.all(16),
           leading: Icon(
             Icons.menu_book,
             size: 24.sp,
@@ -31,16 +33,16 @@ Drawer buildDrawer(BuildContext context) {
             style: AppTheme.bodyText2(),
           ),
           onTap: () {
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => HomeScreen()),
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
             );
           },
         ),
         ListTile(
-          contentPadding: EdgeInsets.all(16),
+          contentPadding: const EdgeInsets.all(16),
           leading: Icon(
-            Icons.person,
+            Icons.book_outlined,
             size: 24.sp,
             color: AppTheme.secondary400,
           ),
@@ -49,42 +51,108 @@ Drawer buildDrawer(BuildContext context) {
             style: AppTheme.bodyText2(),
           ),
           onTap: () {
-
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ReportScreen(currentDay: currentDay),
+              ),
+            );
           },
         ),
         ListTile(
-          contentPadding: EdgeInsets.all(16),
+          contentPadding: const EdgeInsets.all(16),
+          leading: Icon(
+            Icons.note_alt_outlined,
+            size: 24.sp,
+            color: AppTheme.secondary400,
+          ),
+          title: Text(
+            'Benchmark',
+            style: AppTheme.bodyText2(),
+          ),
+          onTap: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BenchmarkScreen(currentDay: currentDay),
+              ),
+            );
+          },
+        ),
+        ListTile(
+          contentPadding: const EdgeInsets.all(16),
           leading: Icon(
             Icons.message,
             size: 24.sp,
             color: AppTheme.secondary400,
           ),
           title: Text(
-            'FarmLog',
+            'Log',
             style: AppTheme.bodyText2(),
           ),
           onTap: () {
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => DataLogScreen()),
+              MaterialPageRoute(
+                builder: (context) => DataLogScreen(currentDay: currentDay),
+              ),
             );
           },
         ),
         ListTile(
-          contentPadding: EdgeInsets.all(16),
+          contentPadding: const EdgeInsets.all(16),
           leading: Icon(
-            Icons.settings,
+            Icons.info_outline,
             size: 24.sp,
             color: AppTheme.secondary400,
           ),
           title: Text(
-            'Settings',
+            'About',
             style: AppTheme.bodyText2(),
           ),
           onTap: () {
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => SettingsScreen()),
+              MaterialPageRoute(
+                  builder: (context) => AboutScreen(currentDay: currentDay)),
+            );
+          },
+        ),
+        // ListTile(
+        //   contentPadding: const EdgeInsets.all(16),
+        //   leading: Icon(
+        //     Icons.settings,
+        //     size: 24.sp,
+        //     color: AppTheme.secondary400,
+        //   ),
+        //   title: Text(
+        //     'Settings',
+        //     style: AppTheme.bodyText2(),
+        //   ),
+        //   onTap: () {
+        //     Navigator.push(
+        //       context,
+        //       MaterialPageRoute(builder: (context) => const SettingsScreen()),
+        //     );
+        //   },
+        // ),
+        SizedBox(height: 100.h),
+        ListTile(
+          contentPadding: const EdgeInsets.all(16),
+          leading: Icon(
+            Icons.logout,
+            size: 24.sp,
+            color: AppTheme.error700,
+          ),
+          title: Text(
+            'Logout',
+            style: AppTheme.bodyText2(color: AppTheme.error700),
+          ),
+          onTap: () {
+            AuthenticationHelper().signOut();
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => LoginScreen()),
             );
           },
         ),
