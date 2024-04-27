@@ -1,21 +1,26 @@
 import 'package:farm_app/features/auth/pages/signup_screen.dart';
 import 'package:farm_app/features/task/pages/home_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../core/common/widgets/reusable _social_icon_widget.dart';
 import '../../../core/common/widgets/reusable_button_widget.dart';
 import '../../../core/common/widgets/reusable_textformfield_widget.dart';
 import '../../../core/common/widgets/reusable_title_widget.dart';
 import '../../../core/helpers/authentication_helper.dart';
 import '../../../core/utils/theme.dart';
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
+
   final TextEditingController _passwordController = TextEditingController();
 
   @override
@@ -25,11 +30,11 @@ class LoginScreen extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
           child: Form(
-            key: _formKey,
+            key: LoginScreen._formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: 24.h),
+                // SizedBox(height: 24.h),
                 const ReusableTitle(title: 'Login\nWelCome back!'),
                 const Spacer(),
                 ReusableTextFormField(
@@ -79,7 +84,7 @@ class LoginScreen extends StatelessWidget {
                     label: 'Login',
                     color: AppTheme.buttonColor,
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
+                      if (LoginScreen._formKey.currentState!.validate()) {
                         AuthenticationHelper()
                             .signIn(
                           context,

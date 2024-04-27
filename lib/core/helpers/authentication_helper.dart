@@ -30,6 +30,8 @@ class AuthenticationHelper {
       // After successful signup, save user data to Firestore
       FirestoreService()
           .saveUserDataToFirestore(userCredential.user!, userName, phoneNumber);
+      // Store tasks document in local storage
+
       // Hide loading spinner
       LoadingSpinner.hide(context);
       return true;

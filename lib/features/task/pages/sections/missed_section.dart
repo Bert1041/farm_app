@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -12,15 +13,20 @@ ExpansionTile buildMissedTaskSection(
     String title, List<DocumentSnapshot> tasksList, int currentDay) {
   // Filter tasks that are not on the current day
   List<DocumentSnapshot> missedTasks = tasksList.where((task) {
-    int taskDay = task[
-        'day']; // Assuming 'day' is the field representing the day of the task
+    // print(task['day']);
+
+    int taskDay = currentDay - 1;
+    // task[
+    //     'day']; // Assuming 'day' is the field representing the day of the task
     return taskDay < currentDay;
   }).toList();
 
   // Group missed tasks by day
   Map<int, List<DocumentSnapshot>> missedTasksByDay = {};
   for (var task in missedTasks) {
-    int taskDay = task['day'];
+    // int taskDay = task['day'];
+    int taskDay = currentDay - 1;
+
     missedTasksByDay.putIfAbsent(taskDay, () => []);
     missedTasksByDay[taskDay]?.add(task);
   }
@@ -56,9 +62,24 @@ ExpansionTile buildMissedTaskSection(
                         taskSubTitle: tasks[index]['category'],
                         taskDescription: tasks[index]['description'],
                         timeDescription: tasks[index]['time'],
-                        priorityDescription: 'Low currentPreArrivalTaskIndex',
-                        reasonDescription: tasksList[index]['reason'],
-
+                        priorityDescription: tasks[index]['priority'],
+                        reasonDescription: tasks[index]['reason'],
+                        isCompleted: tasks[index]['isCompleted'],
+                        onPressed: () {
+                          FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(FirebaseAuth.instance.currentUser!.uid)
+                              .collection('day')
+                              .doc((currentDay - 1).toString())
+                              .collection('dailyTasks')
+                              .doc(tasks[index].id)
+                              .update({'isCompleted': true}).then((_) {
+                            print('Task marked as completed successfully');
+                          }).catchError((error) {
+                            print('Failed to mark task as completed: $error');
+                          });
+                          Navigator.of(context).pop();
+                        },
                       ),
                     ),
                   );
@@ -71,10 +92,23 @@ ExpansionTile buildMissedTaskSection(
                     taskDescription: tasks[index]['description'],
                     timeDescription: tasks[index]['time'],
                     priorityDescription: tasks[index]['priority'],
+                    isCompleted: tasks[index]['isCompleted'],
                     currentIndex: index,
                     totalTasks: tasks.length,
-                    onPressed: () {},
-                    isCompleted: tasks[index]['isCompleted'],
+                    onPressed: () {
+                      FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(FirebaseAuth.instance.currentUser!.uid)
+                          .collection('day')
+                          .doc((currentDay - 1).toString())
+                          .collection('dailyTasks')
+                          .doc(tasks[index].id)
+                          .update({'isCompleted': true}).then((_) {
+                        print('Task marked as completed successfully');
+                      }).catchError((error) {
+                        print('Failed to mark task as completed: $error');
+                      });
+                    },
                   ),
                 ),
               );

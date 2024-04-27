@@ -48,8 +48,11 @@ class TaskService {
   Stream<List<DocumentSnapshot>> getTasksForDayStream(int day) {
     try {
       return FirebaseFirestore.instance
-          .collection('tasks')
-          .where('day', isEqualTo: day)
+          .collection('users')
+          .doc(user!.uid)
+          .collection('day')
+          .doc(day.toString())
+          .collection('dailyTasks')
           .snapshots()
           .map((querySnapshot) => querySnapshot.docs);
     } catch (error) {
@@ -59,29 +62,19 @@ class TaskService {
     }
   }
 
-  Future<List<DocumentSnapshot>> getCompletedTasksForDay(int day) async {
-    try {
-      final querySnapshot = await FirebaseFirestore.instance
-          .collection('tasks')
-          .where('day', isEqualTo: day)
-          // .where('isCompleted', isEqualTo: true)
-          .get();
-      return querySnapshot.docs;
-    } catch (error) {
-      print('Error fetching completed tasks for day $day: $error');
-      return [];
-    }
-  }
-
-  Stream<List<DocumentSnapshot>> getMissedTasks() {
+  Stream<List<DocumentSnapshot>> getMissedTasks(int currentDay) {
     try {
       return FirebaseFirestore.instance
-          .collection('tasks')
+          .collection('users')
+          .doc(user!.uid)
+          .collection('day')
+          .doc((currentDay - 1).toString())
+          .collection('dailyTasks')
           .where('isCompleted', isEqualTo: false)
           .snapshots()
           .map((querySnapshot) => querySnapshot.docs);
     } catch (error) {
-      print('Error fetching missed tasks $error');
+      print('Error fetching missed tasks: $error');
       return Stream.value([]);
     }
   }

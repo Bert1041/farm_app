@@ -56,7 +56,7 @@ class StartTrackingButton extends StatelessWidget {
   }
 
   void _showBatchForm(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+    final batchFormKey = GlobalKey<FormState>();
     String? batch;
     String? quantity;
     String? breed;
@@ -82,7 +82,7 @@ class StartTrackingButton extends StatelessWidget {
               return AlertDialog(
                 title: const Text('Fill Batch Information'),
                 content: Form(
-                  key: _formKey,
+                  key: batchFormKey,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
@@ -139,8 +139,8 @@ class StartTrackingButton extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
+                      if (batchFormKey.currentState!.validate()) {
+                        batchFormKey.currentState!.save();
                         // Save batch information to Firestore
                         _saveBatchInfo(context, batch!, quantity!, breed!);
                       }

@@ -1,9 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../core/common/widgets/reusable_button_widget.dart';
 import '../../../core/utils/theme.dart';
 
 class TaskCard extends StatelessWidget {
@@ -110,18 +107,18 @@ class TaskCard extends StatelessWidget {
                     fontStyle: FontStyle.italic),
               ),
             ),
-            const SizedBox(height: 10.0),
-            Visibility(
-              visible: !isCompleted,
-              child: SizedBox(
-                width: double.infinity,
-                child: ReusableButton(
-                  label: 'Mark as completed',
-                  color: Colors.lightGreen,
-                  onPressed: onPressed,
-                ),
-              ),
-            ),
+            // const SizedBox(height: 10.0),
+            // Visibility(
+            //   visible: !isCompleted,
+            //   child: SizedBox(
+            //     width: double.infinity,
+            //     child: ReusableButton(
+            //       label: 'Mark as completed',
+            //       color: Colors.lightGreen,
+            //       onPressed: onPressed,
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

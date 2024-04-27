@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farm_app/core/common/widgets/reusable_title_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../features/settings/pages/settings_screen.dart';
 import '../../utils/theme.dart';
 
 class ReusableAppBar extends StatelessWidget {
@@ -66,12 +66,23 @@ class ReusableAppBar extends StatelessWidget {
                 String userName =
                     (snapshot.data!.data() as Map)['userName'] ?? 'Unknown';
 
-                return CircleAvatar(
-                    radius: 24,
-                    child: Text(
-                      userName[0],
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                    ));
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              SettingsScreen(userName: userName[0])),
+                    );
+                  },
+                  child: CircleAvatar(
+                      radius: 24,
+                      child: Text(
+                        userName[0],
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 24),
+                      )),
+                );
               },
             ),
           if (user == null)

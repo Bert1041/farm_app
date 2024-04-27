@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../core/utils/theme.dart';
 
-
 class CheckIconWithText extends StatelessWidget {
   final String text;
   final double iconSize;
@@ -27,7 +26,12 @@ class CheckIconWithText extends StatelessWidget {
         // const SizedBox(width: 8),
         Expanded(
           child: Text(
-            text,
+            text
+                .replaceAll('<br>', '\n')
+                .split('\n')
+                .map((line) => line.trim())
+                .join('\n'),
+            textAlign: TextAlign.left,
             style: AppTheme.bodyText3(color: AppTheme.error700),
           ),
         ),

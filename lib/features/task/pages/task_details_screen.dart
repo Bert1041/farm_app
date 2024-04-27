@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../core/common/widgets/reusable_app_bar_widget.dart';
+import '../../../core/common/widgets/reusable_button_widget.dart';
 import '../../../core/utils/theme.dart';
 import '../widgets/check_icon_text_widget.dart';
 
@@ -12,6 +13,8 @@ class TaskDetailsScreen extends StatelessWidget {
   final String timeDescription;
   final String priorityDescription;
   final String reasonDescription;
+  final bool isCompleted;
+  final VoidCallback onPressed; // Callback for the button press
 
   const TaskDetailsScreen({
     super.key,
@@ -21,6 +24,8 @@ class TaskDetailsScreen extends StatelessWidget {
     required this.timeDescription,
     required this.priorityDescription,
     required this.reasonDescription,
+    required this.isCompleted,
+    required this.onPressed,
   });
 
   @override
@@ -45,7 +50,8 @@ class TaskDetailsScreen extends StatelessWidget {
                       SizedBox(height: 16.h),
                       Text('Task: $taskTitle', style: AppTheme.bodyText1()),
                       SizedBox(height: 24.h),
-                      Text('Category: $taskSubTitle', style: AppTheme.bodyText2()),
+                      Text('Category: $taskSubTitle',
+                          style: AppTheme.bodyText2()),
                       SizedBox(height: 18.h),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -95,6 +101,18 @@ class TaskDetailsScreen extends StatelessWidget {
                         text: reasonDescription,
                       ),
                       SizedBox(height: 18.h),
+                      const SizedBox(height: 150.0),
+                      Visibility(
+                        visible: !isCompleted,
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ReusableButton(
+                            label: 'Mark as completed',
+                            color: Colors.lightGreen,
+                            onPressed: onPressed,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),

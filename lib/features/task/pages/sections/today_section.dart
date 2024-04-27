@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:farm_app/core/utils/theme.dart';
 import 'package:farm_app/features/task/pages/task_details_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -9,19 +10,19 @@ import '../../../../core/common/widgets/reussable_info_window_widget.dart';
 import '../../widgets/task_card_widget.dart';
 
 Column buildTaskSection(
-    String title, List<DocumentSnapshot> tasksList, int day) {
+    String title, List<DocumentSnapshot> tasksList, int currentDay) {
   // Filter completed tasks
   final completedTasks =
       tasksList.where((task) => task['isCompleted'] == true).toList();
   final unCompletedTasks =
-  tasksList.where((task) => task['isCompleted'] == false).toList();
+      tasksList.where((task) => task['isCompleted'] == false).toList();
 
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       ReusableInfoWindow(
         title:
-            'Day $day:  You have ${tasksList.length} task(s) today, you have completed ${completedTasks.length} of ${tasksList.length}',
+            'Day $currentDay:  You have ${tasksList.length} task(s) today, you have completed ${completedTasks.length} of ${tasksList.length}',
       ),
       SizedBox(height: 10.h),
       ExpansionTile(
@@ -53,10 +54,28 @@ Column buildTaskSection(
                         builder: (context) => TaskDetailsScreen(
                           taskTitle: unCompletedTasks[index]['taskTitle'],
                           taskSubTitle: unCompletedTasks[index]['category'],
-                          taskDescription: unCompletedTasks[index]['description'],
+                          taskDescription: unCompletedTasks[index]
+                              ['description'],
                           timeDescription: unCompletedTasks[index]['time'],
-                          priorityDescription: unCompletedTasks[index]['priority'],
+                          priorityDescription: unCompletedTasks[index]
+                              ['priority'],
                           reasonDescription: unCompletedTasks[index]['reason'],
+                          isCompleted: unCompletedTasks[index]['isCompleted'],
+                          onPressed: () {
+                            FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(FirebaseAuth.instance.currentUser!.uid)
+                                .collection('day')
+                                .doc(currentDay.toString())
+                                .collection('dailyTasks')
+                                .doc(unCompletedTasks[index].id)
+                                .update({'isCompleted': true}).then((_) {
+                              print('Task marked as completed successfully');
+                            }).catchError((error) {
+                              print('Failed to mark task as completed: $error');
+                            });
+                            Navigator.of(context).pop();
+                          },
                         ),
                       ),
                     );
@@ -69,21 +88,23 @@ Column buildTaskSection(
                       taskDescription: unCompletedTasks[index]['description'],
                       timeDescription: unCompletedTasks[index]['time'],
                       priorityDescription: unCompletedTasks[index]['priority'],
+                      isCompleted: unCompletedTasks[index]['isCompleted'],
                       currentIndex: index,
                       totalTasks: unCompletedTasks.length,
                       onPressed: () {
                         FirebaseFirestore.instance
-                            .collection('tasks')
+                            .collection('users')
+                            .doc(FirebaseAuth.instance.currentUser!.uid)
+                            .collection('day')
+                            .doc(currentDay.toString())
+                            .collection('dailyTasks')
                             .doc(unCompletedTasks[index].id)
-                            .update({'isCompleted': true})
-                            .then((_) {
+                            .update({'isCompleted': true}).then((_) {
                           print('Task marked as completed successfully');
-                        })
-                            .catchError((error) {
+                        }).catchError((error) {
                           print('Failed to mark task as completed: $error');
                         });
                       },
-                      isCompleted: unCompletedTasks[index]['isCompleted'],
                     ),
                   ),
                 );
