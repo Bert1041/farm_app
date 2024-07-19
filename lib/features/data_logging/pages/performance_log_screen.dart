@@ -64,6 +64,7 @@ class _PerformanceLogScreenState extends State<PerformanceLogScreen> {
     super.initState();
     _fetchBatches().then((batches) => setState(
         () => _batches = batches)); // Fetch and store batches on initState
+    print(_batches);
   }
 
   @override
